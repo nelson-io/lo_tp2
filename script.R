@@ -12,8 +12,8 @@ data_stats$consumo_promedio <- mean(data$consumo_promedio_x_mesa)
 data_stats$mesas_promedio <- mean(data$mesas_ocupadas)
 data_stats$mesas_desvio <- sd(data$mesas_ocupadas)
 
-#Simulamos 10000 obs
-set.seed(0)
+#Simulamos 100000 obs
+set.seed(1)
 sim_1 <-
   tibble(
     mesas_ocupadas = round(rnorm(
@@ -28,11 +28,10 @@ sim_1 <-
   consumo_promedio_mesa = data_stats$consumo_promedio,
   profit = mesas_ocupadas * consumo_promedio_mesa) 
 
+
 sim_data <- tibble()
 
 for(i in 0:100){
-  
-  
   
   data_loop <- sim_1 %>% 
     mutate(canibalized = if_else(i > round(.15*mesas_ocupadas), round(.15*mesas_ocupadas), as.double(i)),
@@ -51,9 +50,13 @@ for(i in 0:100){
 
 
 ggplot(sim_data)+
-  geom_line(aes(x = groupones, y = profit))+
+  geom_line(aes(x = groupones, y = profit), size =1)+
+  geom_linerange(x = 53, ymin = 0, ymax = 110578.20, color = "red", size = 1, linetype = 2)+
+  geom_text(x = 53, y = 111200, label = "Cupones = 53", color = 'red')+
   theme_bw()+
-  ggtitle("Groupones otorgados y profits")
+  ggtitle("Groupones otorgados y ganancias diarias estimadas")+
+  xlab("Cupones")+
+  ylab("Ganancia diaria estimada")
 
 
 

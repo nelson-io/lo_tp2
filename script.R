@@ -28,9 +28,10 @@ sim_1 <-
   consumo_promedio_mesa = data_stats$consumo_promedio,
   profit = mesas_ocupadas * consumo_promedio_mesa) 
 
-
+#inicializamos tibble
 sim_data <- tibble()
 
+#Definimos algoritmo e iteramos
 for(i in 0:100){
   
   data_loop <- sim_1 %>% 
@@ -48,7 +49,7 @@ for(i in 0:100){
 
 
 
-
+#graficamos
 ggplot(sim_data)+
   geom_line(aes(x = groupones, y = profit), size =1)+
   geom_linerange(x = 53, ymin = 0, ymax = 110578.20, color = "red", size = 1, linetype = 2)+
@@ -61,8 +62,8 @@ ggplot(sim_data)+
 
 
 
-
-ocup_51g <- (sim_1 %>% 
+#estimamos ocupación para 53 cupones
+ocup_53g <- (sim_1 %>% 
   mutate(canibalized = if_else(53 > round(.15*mesas_ocupadas), round(.15*mesas_ocupadas), as.double(53)),
          mesas_ocupadas = mesas_ocupadas - canibalized,
          mesas_ocupadas_n = pmin(100, mesas_ocupadas + 53),
